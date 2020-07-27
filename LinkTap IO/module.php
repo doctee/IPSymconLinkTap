@@ -24,7 +24,7 @@ class LinkTapIO extends IPSModule
         $this->RegisterPropertyString("apikey", '');
         $this->RegisterAttributeString("apikey", '');
         $this->RegisterAttributeString("taplinkerId", '');
-        $this->RegisterPropertyInteger("UpdateInterval", 15);
+        $this->RegisterPropertyInteger("UpdateInterval", 5);
         $this->RegisterTimer("Update", 0, "LINKTAP_Update(" . $this->InstanceID . ");");
         $this->RegisterAttributeString('devices', '[]');
         $this->RegisterTimer("Delay", 0, "LINKTAP_DelayCommand(" . $this->InstanceID . ");");
@@ -83,8 +83,8 @@ class LinkTapIO extends IPSModule
 
     private function SetLinkTapInterval($linktap_interval): void
     {
-        if ($linktap_interval < 15 && $linktap_interval != 0) {
-            $linktap_interval = 15;
+        if ($linktap_interval < 5 && $linktap_interval != 0) {
+            $linktap_interval = 5;
         }
         $interval = $linktap_interval * 1000 * 60; // minutes
         $this->SetTimerInterval('Update', $interval);
@@ -592,13 +592,14 @@ class LinkTapIO extends IPSModule
             [
                 'type' => 'Label',
                 'visible' => false,
-                'label' => 'Update interval in minutes (minimum 15 minutes):'
+                'label' => 'Update interval in minutes (minimum 5 minutes):'
             ],
             [
                 'name' => 'UpdateInterval',
                 'visible' => false,
                 'type' => 'IntervalBox',
-                'caption' => 'minutes'
+                'suffix' => 'minutes',
+                'caption' => 'Update interval'
             ]
         ];
         return $form;
@@ -669,7 +670,7 @@ class LinkTapIO extends IPSModule
         $last_command_timestamp = $this->ReadAttributeInteger('last_command_timestamp');
         $current_time = time();
         $interval = $current_time - $last_command_timestamp;
-        if ($interval > 15) {
+        if ($interval > 5) {
             $check = true;
         } else {
             $check = false;

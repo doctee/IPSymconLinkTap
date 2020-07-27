@@ -31,58 +31,62 @@ class LinkTap extends IPSModule
         $this->RegisterAttributeString('location', '');
         $this->RegisterAttributeBoolean('location_enabled', false);
         $this->RegisterAttributeString('status', '');
-        $this->RegisterAttributeBoolean('status_enabled', false);
+        $this->RegisterAttributeBoolean('status_enabled', true);
         $this->RegisterAttributeString('version', '');
         $this->RegisterAttributeBoolean('version_enabled', false);
         $this->RegisterAttributeString('taplinkerName', '');
         $this->RegisterAttributeBoolean('taplinkerName_enabled', false);
         $this->RegisterAttributeInteger('signal', 0);
-        $this->RegisterAttributeBoolean('signal_enabled', false);
+        $this->RegisterAttributeBoolean('signal_enabled', true);
         $this->RegisterAttributeInteger('batteryStatus', 0);
-        $this->RegisterAttributeBoolean('batteryStatus_enabled', false);
+        $this->RegisterAttributeBoolean('batteryStatus_enabled', true);
         $this->RegisterAttributeInteger('workMode', 5); // currently activated work mode.
-        $this->RegisterAttributeBoolean('workMode_enabled', false);
+        $this->RegisterAttributeBoolean('workMode_enabled', true);
 
         $this->RegisterAttributeInteger('interval', 0);
-        $this->RegisterAttributeBoolean('interval_enabled', false);
+        $this->RegisterAttributeBoolean('interval_enabled', true);
+        $this->RegisterAttributeInteger('duration', 0);
+        $this->RegisterAttributeBoolean('duration_enabled', true);
+        $this->RegisterAttributeBoolean('action', false);
+        $this->RegisterAttributeBoolean('action_enabled', true);
         $this->RegisterAttributeInteger('Y', 0);
-        $this->RegisterAttributeBoolean('Y_enabled', false);
+        $this->RegisterAttributeBoolean('Y_enabled', true);
         $this->RegisterAttributeInteger('X', 0);
-        $this->RegisterAttributeBoolean('X_enabled', false);
+        $this->RegisterAttributeBoolean('X_enabled', true);
         $this->RegisterAttributeInteger('Z', 0);
-        $this->RegisterAttributeBoolean('Z_enabled', false);
+        $this->RegisterAttributeBoolean('Z_enabled', true);
         $this->RegisterAttributeInteger('ecoOff', 0);
-        $this->RegisterAttributeBoolean('ecoOff_enabled', false);
+        $this->RegisterAttributeBoolean('ecoOff_enabled', true);
         $this->RegisterAttributeInteger('ecoOn', 0);
-        $this->RegisterAttributeBoolean('ecoOn_enabled', false);
+        $this->RegisterAttributeBoolean('ecoOn_enabled', true);
         $this->RegisterAttributeBoolean('eco', false);
-        $this->RegisterAttributeBoolean('eco_enabled', false);
+        $this->RegisterAttributeBoolean('eco_enabled', true);
         // current watering plan. 'H' represents hour, 'M' represents minute, 'D' represents duration.
         $this->RegisterAttributeInteger('H', 0);
-        $this->RegisterAttributeBoolean('H_enabled', false);
+        $this->RegisterAttributeBoolean('H_enabled', true);
         $this->RegisterAttributeInteger('M', 0);
-        $this->RegisterAttributeBoolean('M_enabled', false);
+        $this->RegisterAttributeBoolean('M_enabled', true);
         $this->RegisterAttributeInteger('D', 0);
-        $this->RegisterAttributeBoolean('D_enabled', false);
+        $this->RegisterAttributeBoolean('D_enabled', true);
         $this->RegisterAttributeInteger('watering', 0);
-        $this->RegisterAttributeBoolean('watering_enabled', false);
+        $this->RegisterAttributeBoolean('watering_enabled', true);
         $this->RegisterAttributeFloat('vel', 0); // current flow rate (unit: ml per minute. For G2 only).
-        $this->RegisterAttributeBoolean('vel_enabled', false);
+        $this->RegisterAttributeBoolean('vel_enabled', true);
         $this->RegisterAttributeBoolean('fall', false); // fall incident flag (boolean. For G2 only).
-        $this->RegisterAttributeBoolean('fall_enabled', false);
+        $this->RegisterAttributeBoolean('fall_enabled', true);
         $this->RegisterAttributeBoolean('valveBroken', false); // valve failed to open flag (boolean. For G2 only).
-        $this->RegisterAttributeBoolean('valveBroken_enabled', false);
+        $this->RegisterAttributeBoolean('valveBroken_enabled', true);
         $this->RegisterAttributeBoolean('noWater', false); // water cut-off flag (boolean. For G2 only).
-        $this->RegisterAttributeBoolean('noWater_enabled', false);
+        $this->RegisterAttributeBoolean('noWater_enabled', true);
 
         $this->RegisterAttributeInteger('onDuration', 0); // the remaining watering duration of a watering slot.
-        $this->RegisterAttributeBoolean('onDuration_enabled', false);
+        $this->RegisterAttributeBoolean('onDuration_enabled', true);
         $this->RegisterAttributeInteger('total', 0); // the total watering duration of a watering slot.
-        $this->RegisterAttributeBoolean('total_enabled', false);
+        $this->RegisterAttributeBoolean('total_enabled', true);
         $this->RegisterAttributeInteger('onStamp', 0);
-        $this->RegisterAttributeBoolean('onStamp_enabled', false);
+        $this->RegisterAttributeBoolean('onStamp_enabled', true);
         $this->RegisterAttributeInteger('firstDt', 0);
-        $this->RegisterAttributeBoolean('firstDt_enabled', false);
+        $this->RegisterAttributeBoolean('firstDt_enabled', true);
         $this->RegisterAttributeInteger('pbThrd', 0);
         $this->RegisterAttributeBoolean('pbThrd_enabled', false);
         $this->RegisterAttributeInteger('pcThrd', 0);
@@ -94,7 +98,7 @@ class LinkTap extends IPSModule
         $this->RegisterAttributeInteger('pcCnt', 0);
         $this->RegisterAttributeBoolean('pcCnt_enabled', false);
         $this->RegisterAttributeInteger('vol', 0);
-        $this->RegisterAttributeBoolean('vol_enabled', false);
+        $this->RegisterAttributeBoolean('vol_enabled', true);
 
         //we will wait until the kernel is ready
         $this->RegisterMessage(0, IPS_KERNELMESSAGE);
@@ -167,8 +171,7 @@ class LinkTap extends IPSModule
             [2, $this->Translate("Odd-Even Mode"), "", -1],
             [3, $this->Translate("Seven Day Mode"), "", -1],
             [4, $this->Translate("Month Mode"), "", -1],
-            [5, $this->Translate("Month Mode"), "", -1],
-            [6, $this->Translate("No Mode"), "", -1]];
+            [5, $this->Translate("No Mode"), "", -1]];
         $this->RegisterProfileAssociation('LinkTap.IrrigationMode', 'Drops', '', '', 0, 6, 1, 0, VARIABLETYPE_INTEGER, $mode_ass);
 
         $this->SetupVariable(
@@ -207,70 +210,75 @@ class LinkTap extends IPSModule
         ); // current flow rate (unit: ml per minute. For G2 only).
         $this->RegisterProfile('LinkTap.RemainingDuration', 'Drops', '', ' s', 0, 1000, 1, 0, VARIABLETYPE_INTEGER);
         $this->SetupVariable(
-            'onDuration', $this->Translate('remaining watering duration'), 'LinkTap.RemainingDuration', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'onDuration', $this->Translate('remaining watering duration'), 'LinkTap.RemainingDuration', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         ); // the remaining watering duration of a watering slot.
         $this->RegisterProfile('LinkTap.Total', 'Drops', '', ' ml/minute', 0, 1000, 1, 0, VARIABLETYPE_INTEGER);
         $this->SetupVariable(
-            'total', $this->Translate('total'), 'LinkTap.Total', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'total', $this->Translate('total'), 'LinkTap.Total', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         ); // the total watering duration of a watering slot.
 
         $this->SetupVariable(
-            'interval', $this->Translate('interval'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'interval', $this->Translate('interval'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'Y', $this->Translate('Y'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'duration', $this->Translate('duration'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'X', $this->Translate('X'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'action', $this->Translate('action'), '', $this->_getPosition(), VARIABLETYPE_BOOLEAN, true, true
         );
         $this->SetupVariable(
-            'Z', $this->Translate('z'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'Y', $this->Translate('Y'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'ecoOff', $this->Translate('ecoOff'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'X', $this->Translate('X'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'ecoOn', $this->Translate('ecoOn'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'Z', $this->Translate('Z'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'ecoOn', $this->Translate('eco'), '', $this->_getPosition(), VARIABLETYPE_BOOLEAN, false, false
+            'ecoOff', $this->Translate('ecoOff'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'H', $this->Translate('Hour'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'ecoOn', $this->Translate('ecoOn'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'M', $this->Translate('Minutes'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'eco', $this->Translate('eco'), '', $this->_getPosition(), VARIABLETYPE_BOOLEAN, true, true
         );
         $this->SetupVariable(
-            'D', $this->Translate('Duration'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'H', $this->Translate('Hour'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'watering', $this->Translate('watering'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'M', $this->Translate('Minutes'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'onStamp', $this->Translate('onStamp'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'D', $this->Translate('Slotduration'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'firstDt', $this->Translate('firstDt'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
-        );
-
-        $this->SetupVariable(
-            'pbThrd', $this->Translate('pbThrd'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'watering', $this->Translate('watering'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'pcThrd', $this->Translate('pcThrd'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'onStamp', $this->Translate('onStamp'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'pDelay', $this->Translate('pDelay'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'firstDt', $this->Translate('firstDt'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'pbCnt', $this->Translate('pbCnt'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'pbThrd', $this->Translate('pbThrd'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'pcCnt', $this->Translate('pcCnt'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'pcThrd', $this->Translate('pcThrd'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
         $this->SetupVariable(
-            'vol', $this->Translate('volume'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, false, false
+            'pDelay', $this->Translate('pDelay'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
+        );
+        $this->SetupVariable(
+            'pbCnt', $this->Translate('pbCnt'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
+        );
+        $this->SetupVariable(
+            'pcCnt', $this->Translate('pcCnt'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
+        );
+        $this->SetupVariable(
+            'vol', $this->Translate('volume'), '', $this->_getPosition(), VARIABLETYPE_INTEGER, true, true
         );
 
         $this->WriteValues();
@@ -350,43 +358,45 @@ class LinkTap extends IPSModule
     {
         $id = $this->ReadPropertyString('gatewayId');
         $this->SendDebug('LinkTap Write Values', 'Gateway ID ' . $id, 0);
-        $this->WriteEnabledValue('name', VARIABLETYPE_STRING);
+        $this->WriteEnabledValue('name', VARIABLETYPE_STRING, true);
         $this->WriteEnabledValue('irrigation_state', VARIABLETYPE_BOOLEAN, true);
         $this->WriteEnabledValue('irrigation_time', VARIABLETYPE_INTEGER, true);
         $this->WriteEnabledValue('workMode', VARIABLETYPE_INTEGER, true);
-        $this->WriteEnabledValue('batteryStatus', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('signal', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('location', VARIABLETYPE_STRING);
-        $this->WriteEnabledValue('status', VARIABLETYPE_STRING);
-        $this->WriteEnabledValue('version', VARIABLETYPE_STRING);
-        $this->WriteEnabledValue('taplinkerName', VARIABLETYPE_STRING);
-        $this->WriteEnabledValue('vel', VARIABLETYPE_FLOAT);
-        $this->WriteEnabledValue('onDuration', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('total', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('fall', VARIABLETYPE_BOOLEAN);
-        $this->WriteEnabledValue('valveBroken', VARIABLETYPE_BOOLEAN);
-        $this->WriteEnabledValue('noWater', VARIABLETYPE_BOOLEAN);
+        $this->WriteEnabledValue('batteryStatus', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('signal', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('location', VARIABLETYPE_STRING, true);
+        $this->WriteEnabledValue('status', VARIABLETYPE_STRING, true);
+        $this->WriteEnabledValue('version', VARIABLETYPE_STRING, true);
+        $this->WriteEnabledValue('taplinkerName', VARIABLETYPE_STRING, true);
+        $this->WriteEnabledValue('vel', VARIABLETYPE_FLOAT, true);
+        $this->WriteEnabledValue('onDuration', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('total', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('fall', VARIABLETYPE_BOOLEAN, true);
+        $this->WriteEnabledValue('valveBroken', VARIABLETYPE_BOOLEAN, true);
+        $this->WriteEnabledValue('noWater', VARIABLETYPE_BOOLEAN, true);
 
-        $this->WriteEnabledValue('interval', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('Y', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('X', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('Z', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('ecoOff', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('ecoOn', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('eco', VARIABLETYPE_BOOLEAN);
-        $this->WriteEnabledValue('H', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('M', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('D', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('watering', VARIABLETYPE_INTEGER);
+        $this->WriteEnabledValue('interval', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('duration', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('action', VARIABLETYPE_BOOLEAN, true);
+        $this->WriteEnabledValue('Y', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('X', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('Z', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('ecoOff', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('ecoOn', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('eco', VARIABLETYPE_BOOLEAN, true);
+        $this->WriteEnabledValue('H', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('M', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('D', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('watering', VARIABLETYPE_INTEGER, true);
 
-        $this->WriteEnabledValue('onStamp', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('firstDt', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('pbThrd', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('pcThrd', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('pDelay', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('pbCnt', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('pcCnt', VARIABLETYPE_INTEGER);
-        $this->WriteEnabledValue('vol', VARIABLETYPE_INTEGER);
+        $this->WriteEnabledValue('onStamp', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('firstDt', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('pbThrd', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('pcThrd', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('pDelay', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('pbCnt', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('pcCnt', VARIABLETYPE_INTEGER, true);
+        $this->WriteEnabledValue('vol', VARIABLETYPE_INTEGER, true);
     }
 
     // LinkTap API
@@ -491,7 +501,7 @@ class LinkTap extends IPSModule
         $last_command_timestamp = $this->ReadAttributeInteger('last_command_timestamp');
         $current_time = time();
         $interval = $current_time - $last_command_timestamp;
-        if($interval > 15)
+        if($interval > 5)
         {
             $check = true;
         }
@@ -594,7 +604,7 @@ class LinkTap extends IPSModule
                             $workMode = $taplink->workMode;
                             if($workMode == 'M') // ‘M’ is for Instant Mode
                             {
-                            $this->WriteAttributeInteger('workMode', 0);
+                                $this->WriteAttributeInteger('workMode', 0);
                             }
                             elseif($workMode == 'I') // ‘I’ is for Interval Mode
                             {
@@ -617,11 +627,6 @@ class LinkTap extends IPSModule
                                 $this->WriteAttributeInteger('workMode', 5);
                             }
                             $plan = $taplink->plan; // current watering plan
-                            if(isset($plan->interval))
-                            {
-                                $interval = $plan->interval;
-                                $this->WriteAttributeInteger('interval', $interval);
-                            }
                             $Y = $plan->Y;
                             $this->WriteAttributeInteger('Y', $Y);
                             $X = $plan->X;
@@ -634,20 +639,52 @@ class LinkTap extends IPSModule
                             $this->WriteAttributeInteger('ecoOn', $ecoOn);
                             $eco = $plan->eco;
                             $this->WriteAttributeBoolean('eco', $eco);
+                            if(isset($plan->duration))
+                            {
+                                $duration = $plan->duration;
+                                $this->WriteAttributeInteger('duration', $duration);
+                            }
+                            if(isset($plan->interval))
+                            {
+                                $interval = $plan->interval;
+                                $this->WriteAttributeInteger('interval', $interval);
+                            }
+                            if(isset($plan->action))
+                            {
+                                $action = $plan->action;
+                                $this->WriteAttributeBoolean('action', $action);
+                            }
                             if(isset($plan->slot))
                             {
                                 $slot = $plan->slot; // current watering plan
-                                $hour = $slot->{0}->H; // 'H' represents hour
-                                $this->WriteAttributeInteger('H', $hour);
-                                $minute = $slot->{0}->M; // 'M' represents minute
-                                $this->WriteAttributeInteger('M', $minute);
-                                $duration = $slot->{0}->D; // 'D' represents duration
-                                $this->WriteAttributeInteger('D', $duration);
+                                foreach($slot as $watering_plan)
+                                {
+                                    if(property_exists($watering_plan, 'H'))
+                                    {
+                                        $hour = $watering_plan->H; // 'H' represents hour
+                                        $this->SendDebug('Waterplan hour', $hour, 0);
+                                        $this->WriteAttributeInteger('H', $hour);
+                                    }
+
+                                    if(property_exists($watering_plan, 'M'))
+                                    {
+                                        $minute = $watering_plan->M; // 'M' represents minute
+                                        $this->SendDebug('Waterplan minute', $minute, 0);
+                                        $this->WriteAttributeInteger('M', $minute);
+                                    }
+
+                                    if(property_exists($watering_plan, 'D'))
+                                    {
+                                        $duration = $watering_plan->D; // 'D' represents duration
+                                        $this->SendDebug('Waterplan duration', $duration, 0);
+                                        $this->WriteAttributeInteger('D', $duration);
+                                    }
+                                }
                             }
                             $watering = $taplink->watering;
                             $this->WriteAttributeInteger('watering', $watering);
-                            $vel = floatval($taplink->vel); // latest flow rate (unit: ml per minute. For G2 only)
-                            $this->WriteAttributeFloat('vel', $vel);
+                            // $vel = floatval($taplink->vel); // latest flow rate (unit: ml per minute. For G2 only)
+                            // $this->WriteAttributeFloat('vel', $vel);
                             $fall = $taplink->fall; // fall incident flag (boolean. For G2 only)
                             $this->WriteAttributeBoolean('fall', $fall);
                             $valveBroken = $taplink->valveBroken; // valve failed to open flag (boolean. For G2 only)
@@ -676,8 +713,41 @@ class LinkTap extends IPSModule
                         $value = 0;
                     }
                     $this->WriteAttributeInteger($ident, $value);
+                    $this->SetValue($ident, $value);
                 }
-                $this->SetValue($ident, $value);
+                
+                if($ident == 'Watering_Status')
+                {
+                    $wateringstate = json_decode($payload);
+                    
+                    // var_dump($wateringstate);
+
+                    $onDuration = $wateringstate->onDuration;
+                    $this->WriteAttributeInteger('onDuration', $onDuration);
+
+                    $total = $wateringstate->total;
+                    $this->WriteAttributeInteger('total', $total);
+
+                    $onStamp = $wateringstate->onStamp;
+                    $this->WriteAttributeInteger('onStamp', $onStamp);
+
+                    $firstDt = $wateringstate->firstDt;
+                    $this->WriteAttributeInteger('firstDt', $firstDt);
+
+                    $vel = $wateringstate->vel;
+                    $this->WriteAttributeFloat('vel', $vel);
+
+                    $vol = $wateringstate->vol;
+                    $this->WriteAttributeInteger('vol', $vol);
+
+                    //    'pbThrd' => '25000',
+                    //    'pcThrd' => '0',
+                    //    'pDelay' => '60000',
+                    //    'pbCnt' => '0',
+                    //    'pcCnt' => '0',
+
+                    $this->SendDebug('LinkTap Watering Status', $payload, 0);
+                }
             }
         }
         return $payload;
@@ -840,7 +910,10 @@ class LinkTap extends IPSModule
             'apiKey' => '{APIKEY}',
             'taplinkerId' => $this->ReadPropertyString('taplinkerId')
         ]);
-        return $this->SendCommand('Watering_Status', $data);
+        // return $this->SendCommand('Watering_Status', $data)
+        $payload = $this->SendCommand('Watering_Status', $data);
+        return $this->CheckResponse('Watering_Status', $payload);
+
         /*
          * total: the total watering duration of a watering slot.
 onDuration: the remaining watering duration of a watering slot.
